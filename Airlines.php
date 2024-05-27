@@ -1,58 +1,119 @@
-<?php
-include 'db_SQLCommands.php';
-
-class Airlines {
-  private $conn;
-
-  public function __construct($conn) {
-    $this->conn = $conn;
-  }
-
-  public function listAirlines() {
-    $sql = listAirlines('airlines','AirlineID, AirlineName, AirlineFromDate, AirlineToDate, MergedIntoAirlineID, RenamedToAirlineID');
-
-    $result = $this->conn->query($sql);
-
-    if ($result->num_rows > 0) {
-      // output data of each row
-      while($row = $result->fetch_assoc()) {
-        echo "AirlineID: " . $row["AirlineID"]. " - AirlineName: " . $row["AirlineName"]. " - BeginDate: " . $row["AirlineFromDate"]. " - EndDate: ". $row["AirlineToDate"]. " - Merged Into: ". $row["MergedIntoAirlineID"]. " - Renamed To: ". $row["RenamedToAirlineID"]. "<br>";
-      }
-    } else {
-      echo "0 results";
-    }
-  }
-}
-
-$servername = "localhost";
-$username = "root";
-$password = "VeryKnies23!";
-$dbname = "hephreeair";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
-$airlines = new Airlines($conn);
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $airlines->listAirlines();
-}
-
-$conn->close();
-?>
-
 <!DOCTYPE html>
 <html>
-<body>
+<head>
+  <title>Airlines</title>
+  <style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-  <input type="submit" name="submit" value="Show Me Airlines">
+  table, th, td {
+    border: 1px solid black;
+    padding: 5px;
+  }
+
+  th {
+    text-align: left;
+  }
+  th, td {
+  min-width: 150px;
+}
+  </style>  
+</head>
+
+<body>
+<h2>Show All Airlines</h2>
+<button id="showAirlinesButton">Show Airlines</button>
+  <div id="airlinesFlexgrid"></div>
+  <script>
+  document.getElementById('showAirlinesButton').addEventListener('click', function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'fetchAirlines.php', true);
+    xhr.onload = function() {
+      if (this.status == 200) {
+        document.getElementById('airlinesFlexgrid').innerHTML = this.responseText;
+      }
+    };
+    xhr.send();
+  });
+  </script>
+
+
+<form action="addAirline.php" method="post">
+  <label for="airlineName">Airline Name:</label><br>
+  <input type="text" id="airlineName" name="airlineName"><br>
+  <label for="beginDate">Begin Date:</label><br>
+  <input type="date" id="beginDate" name="beginDate"><br>
+  <label for="endDate">End Date:</label><br>
+  <input type="date" id="endDate" name="endDate"><br>
+  <label for="mergedInto">Merged Into:</label><br>
+  <select id="mergedInto" name="mergedInto">
+    <?php
+    // Fetch all airlines
+    $sql = "SELECT AirlineID FROM airlines";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+      // Output data of each row
+      while($row = $result->fetch_assoc()) {
+        echo "<option value='" . $row["AirlineID"] . "'>" . $row["AirlineID"] . "</option>";
+      }
+    }
+    ?>
+  </select><br>
+  <label for="renamedTo">Renamed To:</label><br>
+  <select id="renamedTo" name="renamedTo">
+    <?php
+    // Fetch all airlines
+    $sql = "SELECT AirlineID FROM airlines";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+      // Output data of each row
+      while($row = $result->fetch_assoc()) {
+        echo "<option value='" . $row["AirlineID"] . "'>" . $row["AirlineID"] . "</option>";
+      }
+    }
+    ?>
+  </select><br>
+  <input type="submit" value="Add Airline">
 </form>
+
+
+<!-- 
+  <h2>Add New Airline</h2>
+  <form method="post" action="Airlines.php">
+    AirlineID: <input type="text" name="airlineID"><br>
+    AirlineName: <input type="text" name="airlineName"><br>
+    AirlineFromDate: <input type="date" name="airlineFromDate"><br>
+    AirlineToDate: <input type="date" name="airlineToDate"><br>
+    MergedIntoAirlineID: <input type="text" name="mergedIntoAirlineID"><br>
+    RenamedToAirlineID: <input type="text" name="renamedToAirlineID"><br>
+    <input type="hidden" name="action" value="add">
+    <input type="submit" value="Add Airline">
+  </form>
+
+  <h2>Update Airline</h2>
+  <form method="post" action="Airlines.php">
+    AirlineID: <input type="text" name="airlineID"><br>
+    AirlineName: <input type="text" name="airlineName"><br>
+    AirlineFromDate: <input type="date" name="airlineFromDate"><br>
+    AirlineToDate: <input type="date" name="airlineToDate"><br>
+    MergedIntoAirlineID: <input type="text" name="mergedIntoAirlineID"><br>
+    RenamedToAirlineID: <input type="text" name="renamedToAirlineID"><br>
+    <input type="hidden" name="action" value="update">
+    <input type="submit" value="Update Airline">
+  </form>
+
+  <h2>Delete Airline</h2>
+  <form method="post" action="Airlines.php">
+    AirlineID: <input type="text" name="airlineID"><br>
+    <input type="hidden" name="action" value="delete">
+    <input type="submit" value="Delete Airline">
+  </form>
+ -->
+
 
 </body>
 </html>
