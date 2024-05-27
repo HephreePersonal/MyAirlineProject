@@ -9,14 +9,14 @@ class Airlines {
   }
 
   public function listAirlines() {
-    $sql = ListAirlines('airlines','AirlineID, AirlineName');
+    $sql = ListAirlines('airlines','AirlineID, AirlineName, AirlineFromDate, AirlineToDate, MergedIntoAirlineID, RenamedToAirlineID');
 
     $result = $this->conn->query($sql);
 
     if ($result->num_rows > 0) {
       // output data of each row
       while($row = $result->fetch_assoc()) {
-        echo "AirlineID: " . $row["AirlineID"]. " - AirlineName: " . $row["AirlineName"]. "<br>";
+        echo "AirlineID: " . $row["AirlineID"]. " - AirlineName: " . $row["AirlineName"]. " - BeginDate: " . $row["AirlineFromDate"]. " - EndDate: ". $row["AirlineToDate"]. " - Merged Into: ". $row["MergedIntoAirlineID"]. " - Renamed To: ". $row["RenamedToAirlineID"]. "<br>";
       }
     } else {
       echo "0 results";
@@ -42,3 +42,4 @@ $airlines = new Airlines($conn);
 $airlines->listAirlines();
 
 $conn->close();
+
