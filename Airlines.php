@@ -1,3 +1,18 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "VeryKnies23!";
+$dbname = "hephreeair";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,37 +62,41 @@
   <input type="date" id="beginDate" name="beginDate"><br>
   <label for="endDate">End Date:</label><br>
   <input type="date" id="endDate" name="endDate"><br>
+
   <label for="mergedInto">Merged Into:</label><br>
   <select id="mergedInto" name="mergedInto">
+  <option value="">NULL</option>
     <?php
     // Fetch all airlines
-    $sql = "SELECT AirlineID FROM airlines";
+    $sql = "SELECT AirlineID,AirlineName FROM airlines";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
       // Output data of each row
       while($row = $result->fetch_assoc()) {
-        echo "<option value='" . $row["AirlineID"] . "'>" . $row["AirlineID"] . "</option>";
+        echo "<option value='" . $row["AirlineID"] . "'>" . $row["AirlineName"] . "</option>";
       }
     }
     ?>
   </select><br>
   <label for="renamedTo">Renamed To:</label><br>
   <select id="renamedTo" name="renamedTo">
+  <option value="">NULL</option>
     <?php
     // Fetch all airlines
-    $sql = "SELECT AirlineID FROM airlines";
+    $sql = "SELECT AirlineID,AirlineName FROM airlines";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
       // Output data of each row
       while($row = $result->fetch_assoc()) {
-        echo "<option value='" . $row["AirlineID"] . "'>" . $row["AirlineID"] . "</option>";
+        echo "<option value='" . $row["AirlineID"] . "'>" . $row["AirlineName"] . "</option>";
       }
     }
     ?>
   </select><br>
   <input type="submit" value="Add Airline">
+  <button id="createAirlineButton">Create Airline</button>
 </form>
 
 
@@ -117,3 +136,4 @@
 
 </body>
 </html>
+
