@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div id="grid-container">
+  <!-- The grid items will be inserted here by the PHP script -->
+</div>
+
+<h2>Update Airline</h2>
+<form method="post" action="Airlines.php">
+  AirlineID: <input type="text" id="updateAirlineID" name="airlineID"><br>
+  AirlineName: <input type="text" id="updateAirlineName" name="airlineName"><br>
+  AirlineFromDate: <input type="date" id="updateAirlineFromDate" name="airlinefromdate"><br>
+  AirlineToDate: <input type="date" id="updateAirlineToDate" name="airlinetodate"><br>
+  MergedIntoAirlineID: <input type="text" id="updateMergedIntoAirlineID" name="mergedintoairlineid"><br>
+  RenamedToAirlineID: <input type="text" id="updateRenamedToAirlineID" name="renamedtoairlineid"><br>
+  <input type="hidden" name="action" value="update">
+  <input type="submit" value="Update Airline">
+</form>
+
+<h2>Add New Airline</h2>
+<form method="post" action="Airlines.php">
+  AirlineID: <input type="text" name="airlineID"><br>
+  AirlineName: <input type="text" name="airlineName"><br>
+  AirlineFromDate: <input type="date" name="airlineFromDate"><br>
+  AirlineToDate: <input type="date" name="airlineToDate"><br>
+  MergedIntoAirlineID: <input type="text" name="mergedIntoAirlineID"><br>
+  RenamedToAirlineID: <input type="text" name="renamedToAirlineID"><br>
+  <input type="hidden" name="action" value="add">
+  <input type="submit" value="Add Airline">
+</form>
+
+<script>
+// This script will be triggered when a grid item is clicked
+function loadAirline(airlineID, airlineName) {
+  document.getElementById('updateAirlineID').value = airlineID;
+  document.getElementById('updateAirlineName').value = airlineName;
+}
+</script>
+
+</body>
+</html>

@@ -1,3 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto; /* Adjust as needed */
+  padding: 10px;
+}
+.grid-item {
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="grid-container">
+
 <?php
 include 'db_SQLCommands.php';
 
@@ -16,7 +37,14 @@ class Airlines {
     if ($result->num_rows > 0) {
       // output data of each row
       while($row = $result->fetch_assoc()) {
-        echo "AirlineID: " . $row["AirlineID"]. " - AirlineName: " . $row["AirlineName"]. " - BeginDate: " . $row["AirlineFromDate"]. " - EndDate: ". $row["AirlineToDate"]. " - Merged Into: ". $row["MergedIntoAirlineID"]. " - Renamed To: ". $row["RenamedToAirlineID"]. "<br>";
+        echo "<div class='grid-item'>";
+        echo "AirlineID: " . $row["AirlineID"] . "<br>";
+        echo "AirlineName: " . $row["AirlineName"];
+        echo "AirlineFromDate: " . $row["AirlineFromDate"];
+        echo "AirlineToDate: " . $row["AirlineToDate"];
+        echo "MergedIntoAirlineID: " . $row["MergedIntoAirlineID"];
+        echo "RenamedToAirlineID: " . $row["RenamedToAirlineID"];
+        echo "</div>";
       }
     } else {
       echo "0 results";
@@ -38,21 +66,12 @@ if ($conn->connect_error) {
 }
 
 $airlines = new Airlines($conn);
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $airlines->listAirlines();
-}
+$airlines->listAirlines();
 
 $conn->close();
 ?>
 
-<!DOCTYPE html>
-<html>
-<body>
-
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-  <input type="submit" name="submit" value="Show Me Airlines">
-</form>
+</div>
 
 </body>
 </html>
